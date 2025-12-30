@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Make the app look modern instantly */
+body {
+  background-color: #f8fafc; /* Light gray background */
+  font-family: "Inter", sans-serif;
+}

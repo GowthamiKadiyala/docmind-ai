@@ -1,0 +1,30 @@
+services:
+  # 1. The API Service
+  - type: web
+    name: docmind-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000 --app-dir backend
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: OPENAI_API_KEY
+        sync: false # <--- SECURE: We input this in the dashboard
+
+  # 2. The Background Worker
+  - type: worker
+    name: docmind-worker
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: celery -A app.workers.tasks worker --loglevel=info --workdir backend
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: OPENAI_API_KEY
+        sync: false # <--- SECURE
+
+  # 3. Redis (The Database)
+  - type: redis
+    name: docmind-redis
+    region: oregon
+    plan: free
